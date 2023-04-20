@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Find Your GSI!</title>
+	<style>
+		body {
+			background-color: #b8860b;
+		}
+
+		h1 {
+			font-size: 50px;
+			text-align: center;
+			padding-top: 50px;
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding-top: 50px;
+		}
+
+		label {
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		input[type="text"] {
+			font-size: 16px;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			margin-bottom: 20px;
+			width: 250px;
+		}
+
+		button[type="submit"] {
+			font-size: 20px;
+			padding: 10px 20px;
+			border-radius: 5px;
+			border: none;
+			background-color: #003262;
+			color: white;
+			cursor: pointer;
+		}
+
+		button[type="submit"]:hover {
+			background-color: #002548;
+		}
+	</style>
+</head>
+<body>
+	<h1>Find Your GSI!</h1>
+	<!-- Search bar to search for teacher -->
+	<form name="frmContact" method="post" action="teacher3.php">
+		<label for="firstName">GSI First Name:</label>
+		<input type="text" name="firstName">
+		<label for="lastName">GSI Last Name:</label>
+		<input type="text" name="lastName">
+		<button type="submit">Search</button>
+	</form>
+</body>
+</html>

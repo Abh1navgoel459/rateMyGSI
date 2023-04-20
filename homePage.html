@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Rate My GSI</title>
+	<style>
+		body {
+			background-color: #003262; /* Blue */
+			color: #ffd700; /* Gold */
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			margin: 0;
+			padding: 0;
+		}
+		h1 {
+			color: #ffd700; /* Gold */
+			font-size: 48px;
+			font-weight: bold;
+			margin: 50px auto 20px;
+			text-align: center;
+		}
+		p {
+			font-size: 24px;
+			margin: 20px auto;
+			text-align: center;
+		}
+		.button-container {
+			display: flex;
+			flex-direction: row-reverse;
+			margin-top: 20px;
+			margin-right: 20px;
+		}
+		button {
+			background-color: #4CAF50;
+			border: none;
+			border-radius: 4px;
+			color: white;
+			cursor: pointer;
+			font-size: 24px;
+			margin-left: 20px;
+			padding: 10px 20px;
+			width: 150px;
+		}
+		button:hover {
+			background-color: #3e8e41;
+		}
+		.container {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			margin: 50px auto;
+			max-width: 800px;
+		}
+		.box {
+			background-color: #0F4C81;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+			margin: 20px;
+			padding: 20px;
+			text-align: center;
+			width: 300px;
+		}
+		.box img {
+			height: 100px;
+		}
+		.box h2 {
+			font-size: 24px;
+			margin-top: 0;
+		}
+		.box p {
+			font-size: 16px;
+			margin-bottom: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="button-container">
+		<button onclick="window.location.href='registration.html'">Sign Up</button>
+		<button onclick="window.location.href='login.html'">Log In</button>
+	</div>
+	<h1>Rate My GSI</h1>
+	<p>Rate your favorite (or least favorite) GSIs at Berkeley!</p>
+	<div class="container">
+		<div class="box">
+			<img src="thumbs-up.png" alt="thumbs up">
+			<h2>Create and modify your ratings</h2>
+			<p>Use our user-friendly interface to create, modify, and delete your ratings for GSIs at Berkeley.</p>
+		</div>
+		<div class="box">
+			<img src="magnifying-glass.jpeg" alt="magnifying glass">
+			<h2>View other people's ratings</h2>
+			<p>Browse and search through other people's ratings for GSIs at Berkeley to get a better sense of who to choose.</p>
+		</div>
+	</div>
+</body>
+</html>

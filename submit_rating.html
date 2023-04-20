@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Rating System</title>
+    <style>
+        .stars {
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .stars span {
+            font-size: 20px;
+            cursor: pointer;
+            color: gray;
+        }
+        .stars span:hover,
+        .stars span.active {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teacher Rating System</h1>
+    <br>
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Reading POST data
+        $firstName = $_POST["firstName"];
+        $lastName = $_POST["lastName"];
+    } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        // Reading GET data
+        $firstName = $_GET["firstName"];
+        $lastName = $_GET["lastName"];
+    }
+    ?>
+    <label for="teacher">Teacher Name:</label>
+    <?php
+        echo "<p>$firstName</p>";
+        echo "<p>$lastName</p>";
+    ?>
+    <div class="stars">
+        <span data-rating="1">&#9733;</span>
+        <span data-rating="2">&#9733;</span>
+        <span data-rating="3">&#9733;</span>
+        <span data-rating="4">&#9733;</span>
+        <span data-rating="5">&#9733;</span>
+    </div><br><br>
+    <button onclick="submitRating()">Submit Rating</button>
+    <br><br>
+    <div id="teacherInfo"></div>
+    <script>
+        let teacherRatings = new Map();
+        teacherRatings.set("Justin Yakota", new Map());
+        teacherRatings.set("Ala Koretiem", new Map());
+        teacherRatings.set("Ethan Gillis", new Map());
+
+        let registeredUsers = new Map();
+
+
+        function updateStars(rating) {
+          let stars = document.querySelectorAll(".stars span");
+          stars.forEach(function(star) {
+            if (star.getAttribute("data-rating") <= rating) {
+              star.classList.add("active");
+            } else {
+              star.classList.remove("active");
+            }
+          });
+        }
+        function submitRating() {
+    let teacherName = document.getElementById("teacher").value;
+    let stars = document.querySelectorAll(".stars span.active").length;
+    let username = document.getElementById("regUsername").value.trim();
+    let password = document.getElementById("regPassword").value;
+
+    if (username === "" || password === "") {
+        alert("Please enter a username and password.");
+        return;
+    }
+
+    if (registeredUsers.has(username)) {
+        alert("Username already taken. Please choose another username.");
+        return;
+    }
+
+    registeredUsers.set(username, password);
+
+    let ratings = teacherRatings.get(teacherName);
+    if (ratings.has(username)) {
+        let oldStars = ratings.get(username);
+        let oldAverage = calculateAverageRating(teacherName, oldStars, ratings.size - 1);
+        ratings.set(username, stars);
+        let newAverage = calculateAverageRating(teacherName, stars, ratings.size - 1);
+        updateTeacherInfo(teacherName, oldAverage, newAverage);
+    } else {
+        ratings.set(username, stars);
+        let averageRating = calculateAverageRating(teacherName, stars, ratings.size);
+        updateTeacherInfo(teacherName, null, averageRating);
+    }
+
+    // prevent form submission
+    event.preventDefault();
+
+    // submit form data using AJAX request
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "submit_rating.php");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("teacher=" + encodeURIComponent(teacherName) +
+             "&stars=" + encodeURIComponent(stars) +
+             "&username=" + encodeURIComponent(username) +
+             "&password=" + encodeURIComponent(password));
+}
+
+function calculateAverageRating(teacherName, newStars, numRatings) {
+    let ratings = teacherRatings.get(teacherName);
+    let sum = 0;
+    let count = 0;
+    for (let [key, value] of ratings.entries()) {
+        sum += value;
+        count++;
+    }
+    sum += newStars;
+    count++;
+    let average = sum / count;
+    return Number(average.toFixed(2));
+}
+
+function updateTeacherInfo(teacherName, oldAverage, newAverage) {
+    let teacherInfo = document.getElementById("teacherInfo");
+    let html = "<p>Teacher: " + teacherName + "</p>";
+    if (oldAverage != null) {
+        html += "<p>Old Average Rating: " + oldAverage.toFixed(2) + "</p>";
+    }
+    html += "<p>New Average Rating: " + newAverage.toFixed(2) + "</p>";
+    teacherInfo.innerHTML = html;
+}
+
+    let stars = document.querySelectorAll(".stars span");
+    stars.forEach(function(star) {
+    star.addEventListener("click", function() {
+        updateStars(this.getAttribute("data-rating"));
+    });
+});
+</script>
+</body>
+</html>

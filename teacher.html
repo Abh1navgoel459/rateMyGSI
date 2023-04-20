@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>View Teacher Rating</title>
+</head>
+<body>
+	<!-- Search bar to search for teacher -->
+	<form name="frmContact" method="post" action="teacher.php">
+		<label for="teacher-first-name">Teacher First Name:</label>
+		<input type="text" id="teacher-first-name" name="firstName">
+		<label for="teacher-last-name">Teacher Last Name:</label>
+		<input type="text" id="teacher-last-name" name="lastName">
+		<button type="submit">Search</button>
+	</form>
+
+	<!-- Display teacher's name and rating if found -->
+
+	<?php
+		if(isset($_POST['firstName']) && isset($_POST['lastName'])) {
+			$firstName = $_POST['firstName'];
+			$lastName = $_POST['lastName'];
+
+			// Connect to the database
+			$conn = mysqli_connect('localhost', 'student', 'student123456789', 'teacher_rating_system');
+
+			// Search for the teacher's ID in the database using their first and last name
+			$sql = "SELECT id FROM teacher_ratings WHERE first_name = '$firstName' AND last_name = '$lastName'";
+			$result = mysqli_query($conn, $sql);
+
+			if($result->num_rows > 0) {
+				$row = mysqli_fetch_assoc($result);
+				$teacher_id = $row['id'];
+
+				// Get the average rating for the teacher from the database
+				$sql = "SELECT avg_rating FROM student_teacher WHERE teacher_id = $teacher_id";
+				$result = $conn->query($sql);
+
+				if($result->num_rows > 0) {
+					$row = $result->fetch_assoc();
+					$average_rating = round($row['avg_rating'], 2);
+				} else {
+					$average_rating = "N/A";
+				}
+
+				// Display teacher's name and rating
+				echo '<div id="teacher-rating">';
+				echo '<h1 style="text-align: center;">' . $firstName . ' ' . $lastName . '</h1>';
+				echo '<h2 style="color: red; text-align: center;">' . $average_rating . ' out of 5</h2>';
+				echo '<button onclick="location.href = \'rate-teacher.php?teacher=' . urlencode($firstName . ' ' . $lastName) . '\';">Rate this teacher</button>';
+				echo '</div>';
+			} else {
+				// Display message if teacher not found in the database
+				echo '<h2 style="text-align: center;">Teacher not found</h2>';
+			}
+
+			// Close database connection
+			mysqli_close($conn);
+		}
+	?>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Search Bar Example</title>
+    <style>
+      /* Center the search bar and label */
+      #search-container {
+        text-align: center;
+      }
+      /* Style the label */
+      #search-label {
+        color: red;
+        font-size: 1.2em;
+        margin-bottom: 0.5em;
+      }
+      /* Style the search input */
+      #search-input {
+        padding: 0.5em;
+        border: 1px solid gray;
+        border-radius: 5px;
+        width: 300px;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="search-container">
+      <form name="frmContact" method="post" action="search.php">
+      <label id="search-label" for="search-input">Find Your Teacher</label>
+      <input id="search-input" type="text" placeholder="Enter your search query">
+    </form>
+    </div>
+  </body>
+</html>

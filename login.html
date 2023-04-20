@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login Form</title>
+<style>
+body {
+  background-color: #003262;
+  text-align: center;
+}
+fieldset {
+  margin: 0 auto;
+  width: 50%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+legend {
+  font-size: 30px;
+  text-align: center;
+  padding-top: 50px;
+}
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+}
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-size: 24px;
+}
+</style>
+</head>
+<body>
+<fieldset>
+<legend>Login</legend>
+<form name="frmContact" method="post" action="login.php">
+<label for="username">Username </label>
+<input type="text" name="username" length = 45>
+</p>
+<p>
+<label for="password">Password</label>
+<input type="password" name="password" length=45>
+</p>
+<p>&nbsp;</p>
+<p>
+<input type="submit" name="Submit" id="Submit" value="Submit">
+</p>
+</form>
+</fieldset>
+</body>
+</html> 
