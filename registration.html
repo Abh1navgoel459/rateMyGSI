@@ -1,81 +1,91 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sign Up Form</title>
-<style>
-body {
-  background-color: #003262;
-}
-fieldset {
-  margin: 0 auto;
-  width: 50%;
-  text-align: center;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-}
-legend {
-  font-size: 30px;
-  padding-top: 40px;
-}
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  box-sizing: border-box;
-  border: none;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-}
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 16px 32px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
-  font-size: 24px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Rate My GSI - Sign Up</title>
+  <style>
+    @font-face {
+      font-family: 'DeliusUnicaseRegular';
+      src: url('path/to/deliusunicase-regular.ttf') format('truetype');
+    }
+
+    body {
+      background-color: #162447;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 450px;
+      height: 300px;
+      padding: 20px;
+      text-align: center;
+      background-color: white;
+      color: black;
+    }
+
+    .title {
+      font-family: 'DeliusUnicaseRegular', sans-serif;
+      font-size: 36px;
+      font-weight: normal;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #162447;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 10px;
+      background-color: #9b730fb0;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 40px; /* Added margin-top */
+    }
+
+  </style>
 </head>
-
 <body>
-<fieldset>
-<legend>Sign Up</legend>
-<form name="frmContact" method="post" action="registration.php">
-<p>
-<label for="firstName">First Name </label>
-<input type="text" name="firstName" id="firstName" length="45">
-</p>
-<p>
-<label for="lastName">Last Name </label>
-<input type="text" name="lastName" id="lastName" length="45">
-</p>
-<p>
-<label for="emailAddress">Email</label>
-<input type="text" name="emailAddress" id="emailAddress" length="45">
-</p>
-<p>
-<label for="phone_num">Phone</label>
-<input type="text" name="phone_num" id="phone_num" length="45">
-</p>
-
-<p>
-<label for="username">Username </label>
-<input type="text" name="username" id="username" length="45">
-</p>
-<p>
-<label for="password">Password</label>
-<input type="password" name="password" id="password" length="45">
-</p>
-<p>&nbsp;</p>
-<p>
-<input type="submit" name="Submit" id="Submit" value="Submit">
-</p>
-</form>
-</fieldset>
+  <div class="container">
+    <div class="title">Rate My GSI</div>
+    <form action="registration.php" method="post">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="emailAddress">Email:</label>
+        <input type="text" id="emailAddress" name="emailAddress" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
