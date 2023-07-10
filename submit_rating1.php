@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Rate This GSI!</title>
-     <style>
+    <style>
         body {
             background-color: #003262;
             color: white;
@@ -53,6 +53,7 @@
         .question {
             margin-right: 20px;
         }
+
         .name-container {
             text-align: center;
         }
@@ -60,7 +61,6 @@
         .name-container p {
             font-size: 24px;
         }
-
 
         .submit-button {
             display: block;
@@ -73,6 +73,10 @@
             border-radius: 4px;
             cursor: pointer;
             margin-left: 30px;
+        }
+
+        .required-star {
+            color: red;
         }
     </style>
 </head>
@@ -92,45 +96,45 @@
     <?php
         echo '<div class="name-container"><p>'.$firstName.'</p></div>';
     ?>
-    <form name="frmContact" method="post" action="submit_rating.php">
+    <form name="frmContact" method="post" action="submit_rating.php" onsubmit="return validateForm()">
         <div class="rating-container">
             <div class="questions-container">
                 <div class="question">
-                    <label for="takeAgain">Would you take this GSI again?</label>
+                    <label for="takeAgain">Would you take this GSI again?<span class="required-star">*</span></label>
                     <div>
-                        <input type="radio" id="takeAgainYes" name="takeAgain" value="yes">
+                        <input type="radio" id="takeAgainYes" name="takeAgain" value="yes" required>
                         <label for="takeAgainYes">Yes</label>
-                        <input type="radio" id="takeAgainNo" name="takeAgain" value="no">
+                        <input type="radio" id="takeAgainNo" name="takeAgain" value="no" required>
                         <label for="takeAgainNo">No</label>
                     </div>
                 </div>
 
                 <div class="question">
-                    <label for="credit">Was this class taken for credit?</label>
+                    <label for="credit">Was this class taken for credit?<span class="required-star">*</span></label>
                     <div>
-                        <input type="radio" id="creditYes" name="credit" value="yes">
+                        <input type="radio" id="creditYes" name="credit" value="yes" required>
                         <label for="creditYes">Yes</label>
-                        <input type="radio" id="creditNo" name="credit" value="no">
+                        <input type="radio" id="creditNo" name="credit" value="no" required>
                         <label for="creditNo">No</label>
                     </div>
                 </div>
 
                 <div class="question">
-                    <label for="attendance">Was attendance mandatory?</label>
+                    <label for="attendance">Was attendance mandatory?<span class="required-star">*</span></label>
                     <div>
-                        <input type="radio" id="attendanceYes" name="attendance" value="yes">
+                        <input type="radio" id="attendanceYes" name="attendance" value="yes" required>
                         <label for="attendanceYes">Yes</label>
-                        <input type="radio" id="attendanceNo" name="attendance" value="no">
+                        <input type="radio" id="attendanceNo" name="attendance" value="no" required>
                         <label for="attendanceNo">No</label>
                     </div>
                 </div>
 
                 <div class="question">
-                    <label for="textbooks">Did this professor use textbooks?</label>
+                    <label for="textbooks">Did this professor use textbooks?<span class="required-star">*</span></label>
                     <div>
-                        <input type="radio" id="textbooksYes" name="textbooks" value="yes">
+                        <input type="radio" id="textbooksYes" name="textbooks" value="yes" required>
                         <label for="textbooksYes">Yes</label>
-                        <input type="radio" id="textbooksNo" name="textbooks" value="no">
+                        <input type="radio" id="textbooksNo" name="textbooks" value="no" required>
                         <label for="textbooksNo">No</label>
                     </div>
                 </div>
@@ -143,7 +147,7 @@
                 <span class="overallRatingStar" data-rating="4">&#9733;</span>
                 <span class="overallRatingStar" data-rating="5">&#9733;</span>
             </div>
-            <label for="overallRating">Overall Rating</label>
+            <label for="overallRating">Overall Rating<span class="required-star">*</span></label>
         </div>
 
         <div class="rating-container">
@@ -154,7 +158,7 @@
                 <span class="difficultyRatingStar" data-rating="4">&#9733;</span>
                 <span class="difficultyRatingStar" data-rating="5">&#9733;</span>
             </div>
-            <label for="difficultyRating">Difficulty Rating</label>
+            <label for="difficultyRating">Difficulty Rating<span class="required-star">*</span></label>
         </div>
 
         <div class="rating-container">
@@ -177,7 +181,7 @@
                 <option value="Drop/Withdrawal">Drop/Withdrawal</option>
                 <option value="Incomplete">Incomplete</option>
                 <option value="In progress">In progress</option>
-                <option value="Prefer not to say">Prefer not to say</option>
+                <option value="Prefer not to say">Prefer not to say</</option>
             </select>
         </div>
 
@@ -195,29 +199,49 @@
 
     <script>
         function updateStars(rating, starClass) {
-          let stars = document.querySelectorAll(`.${starClass}`);
-          stars.forEach(function(star) {
-            if (star.getAttribute("data-rating") <= rating) {
-              star.classList.add("active");
+            let stars = document.querySelectorAll(`.${starClass}`);
+            stars.forEach(function(star) {
+                if (star.getAttribute("data-rating") <= rating) {
+                    star.classList.add("active");
+                } else {
+                    star.classList.remove("active");
+                }
+            });
+        }
+
+        function validateForm() {
+            let overallRatingStars = document.querySelectorAll(".overallRatingStar.active");
+            let difficultyRatingStars = document.querySelectorAll(".difficultyRatingStar.active");
+            let takeAgainChecked = document.querySelector('input[name="takeAgain"]:checked');
+            let creditChecked = document.querySelector('input[name="credit"]:checked');
+            let attendanceChecked = document.querySelector('input[name="attendance"]:checked');
+            let textbooksChecked = document.querySelector('input[name="textbooks"]:checked');
+            let overallRating = overallRatingStars.length;
+            let difficultyRating = difficultyRatingStars.length;
+
+            if (
+                takeAgainChecked &&
+                creditChecked &&
+                attendanceChecked &&
+                textbooksChecked &&
+                overallRating > 0 &&
+                difficultyRating > 0
+            ) {
+                document.getElementById("overallRating").value = overallRating;
+                document.getElementById("difficultyRating").value = difficultyRating;
+                return true;
             } else {
-              star.classList.remove("active");
+                alert("Please fill out all the required fields.");
+                return false;
             }
-          });
         }
 
         function submitRating() {
-            let teacher_id = document.getElementById("teacher_id").value;
-            let overallRating = document.querySelectorAll(".overallRatingStar.active").length;
-            let difficultyRating = document.querySelectorAll(".difficultyRatingStar.active").length;
-            let takeAgain = document.querySelector('input[name="takeAgain"]:checked').value === "yes" ? "yes" : "no";
-            let credit = document.querySelector('input[name="credit"]:checked').value === "yes" ? "yes" : "no";
-            let attendance = document.querySelector('input[name="attendance"]:checked').value === "yes" ? "yes" : "no";
-            let textbooks = document.querySelector('input[name="textbooks"]:checked').value === "yes" ? "yes" : "no";
-            let grade = encodeURIComponent(document.getElementById("grade").value);
-            let comment = encodeURIComponent(document.getElementById("comment").value);
-            document.getElementById("overallRating").value = overallRating;
-            document.getElementById("difficultyRating").value = difficultyRating;
-            document.getElementById("comment").value = comment;
+            if (validateForm()) {
+                let teacher_id = document.getElementById("teacher_id").value;
+                let comment = encodeURIComponent(document.getElementById("comment").value);
+                document.getElementById("comment").value = comment;
+            }
         }
 
         let overallRatingStars = document.querySelectorAll(".overallRatingStar");
