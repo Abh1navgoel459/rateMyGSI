@@ -12,9 +12,14 @@ $password = $_POST['password'];
 if (empty($username) || empty($password)) {
     echo "Error: One or more fields are blank.";
 } else {
-    // Query the database to check if the username and password exist
-    $sql = "SELECT * FROM students WHERE username='$username' AND password='$password'";
-    $result = mysqli_query($con, $sql);
+    // Prepare the SQL statement with placeholders
+    $stmt = mysqli_prepare($con, "SELECT * FROM students WHERE username=? AND password=?");
+    // Bind the parameters to the placeholders
+    mysqli_stmt_bind_param($stmt, 'ss', $username, $password);
+    // Execute the prepared statement
+    mysqli_stmt_execute($stmt);
+    // Get the result set from the prepared statement
+    $result = mysqli_stmt_get_result($stmt);
 
     // Check for query errors
     if (!$result) {
@@ -30,6 +35,8 @@ if (empty($username) || empty($password)) {
         session_start();
         $_SESSION['username'] = $username;
         $_SESSION['student_id'] = $student_id;
+        mysqli_stmt_close($stmt);
+        mysqli_close($con);
         header('Location: teacher2.html');
         exit();
     } else {
@@ -38,6 +45,7 @@ if (empty($username) || empty($password)) {
     }
 }
 
-// Close the database connection
+// Close the prepared statement and the database connection
+mysqli_stmt_close($stmt);
 mysqli_close($con);
 ?>
