@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reset Password</title>
+    <title>Reset Information</title>
     <style>
         body {
             background-color: #162447;
@@ -42,7 +42,6 @@
             margin-bottom: 5px;
         }
 
-        .form-group input[type="email"],
         .form-group input[type="username"],
         .form-group input[type="password"] {
             width: 100%;
@@ -50,70 +49,59 @@
             box-sizing: border-box;
         }
 
-        .form-group input[type="submit"] {
+        .form-group button {
             width: 100%;
             padding: 10px;
             background-color: #9b730fb0;
             color: white;
             border: none;
             cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <?php
-        // Check if the key parameter is present in the URL
-        if (isset($_GET['key'])) {
-            // Retrieve the key and email values from the URL
-            $key = $_GET['key'];
-            $email = $_GET['email'];
+        // Get the email address from the URL parameter
 
-            // TODO: Validate the key and email in the database
-            $con = mysqli_connect('127.0.0.1', 'student', 'student123456789','teacher_rating_system'); // Replace with your database credentials
-            $key = mysqli_real_escape_string($con, $key);
-            $email = mysqli_real_escape_string($con, $email);
+        // Check if the form is submitted
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Get the user input from the form
+            $newUsername = $_POST["username"];
+            $newPassword = $_POST["password"];
+            $email = $_POST["email"];
 
-            $sql = "SELECT * FROM password_reset_temp WHERE `key` = '$key' AND email = '$email'";
-            $result = mysqli_query($con, $sql);
+            // Connect to the database
+            $con = mysqli_connect('127.0.0.1', 'student', 'student123456789', 'teacher_rating_system');
 
-            if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                $expDate = $row['expDate'];
+            // Check if the email exists in the students table
+            $query = "SELECT * FROM students WHERE emailAddress = '$email'";
+            $result = mysqli_query($con, $query);
 
-                // Compare the current date and time with the expiration date/time
-                $currentDateTime = date('Y-m-d H:i:s');
-                if ($currentDateTime <= $expDate) {
-                    // Key and email are valid, and the reset link is not expired
-                    echo '<h1 class="title">Reset Password</h1>';
-                    echo '<form method="post" action="reset_information.php">';
-                    echo '<input type="hidden" name="key" value="' . $key . '">';
-                    echo '<div class="form-group">';
-                    echo '<label for="email">Email:</label>';
-                    echo '<input type="email" name="email" id="email" value="' . $email . '" readonly>';
-                    echo '</div>';
-                    echo '<div class="form-group">';
-                    echo '<label for="username">New Username:</label>';
-                    echo '<input type="username" name="username" id="username" required>';
-                    echo '</div>';
-                    echo '<div class="form-group">';
-                    echo '<label for="password">New Password:</label>';
-                    echo '<input type="password" name="password" id="password" required>';
-                    echo '</div>';
-                    echo '<input type="submit" value="Reset Password">';
-                    echo '</form>';
+            if ($result->num_rows > 0) {
+                // Check if the new username or password already exists for the given email address
+                $existingQuery = "SELECT * FROM students WHERE emailAddress = '$email' AND (username = '$newUsername' OR password = '$newPassword')";
+                $existingResult = mysqli_query($con, $existingQuery);
+
+                if ($existingResult->num_rows > 0) {
+                    echo "You have already used either the username or password before.";
                 } else {
-                    // Reset link has expired
-                    echo '<p>The reset link has expired. Please generate a new one.</p>';
+                    // Update the record with the new username and password
+                    $updateQuery = "UPDATE students SET username = '$newUsername', password = '$newPassword' WHERE emailAddress = '$email'";
+                    if (mysqli_query($con, $updateQuery)) {
+                        echo "Username and password updated successfully.";
+                        echo '<button onclick="window.location.href = \'login.html\';">Go to Login</button>';
+                    } else {
+                        echo "Failed to update username and password.";
+                    }
                 }
             } else {
-                // Key and email are invalid
-                echo '<p>Invalid reset link. Please try again.</p>';
+                echo "Email not found in the database.";
             }
 
+            // Close the database connection
             mysqli_close($con);
-        } else {
-            echo '<p>Invalid reset link. Please try again.</p>';
         }
         ?>
     </div>
