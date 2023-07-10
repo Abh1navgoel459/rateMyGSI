@@ -1,63 +1,80 @@
-<?php
-// Check if the current session exists
-if (isset($_SESSION["email"])) {
-    // Destroy the current session
-    session_destroy();
-    // Start a new session
-    session_start();
-} else {
-    // Start a new session
-    session_start();
-}
-
-// Continue with the rest of the code
-// ...
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get the user input from the form
-    $email = $_POST["email"];
-
-    // Generate a random code between 1000 and 10000000
-    $code = rand(1000, 10000000);
-
-    // Store the email and code as session variables
-    $_SESSION["email"] = $email;
-    $_SESSION["code"] = $code;
-
-    // Send the email with the code
-    $to = $email;
-    $subject = "Password Reset";
-    $message = "Please type in the following code to reset your username or password: $code";
-    $headers = "From: abhinavgoel459@berkeley.edu";
-
-    // Send the email
-    if (mail($to, $subject, $message, $headers)) {
-        // Email sent successfully
-        echo "Email sent successfully.";
-    } else {
-        // Failed to send the email
-        echo "Failed to send the email.";
-    }
-
-    // Redirect to reset_page.php
-    header("Location: reset_page.php");
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Code Verification</title>
+    <title>Reset Information</title>
+    <style>
+        body {
+            background-color: #162447;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 400px;
+            height: 250px;
+            padding: 20px;
+            border: 1px solid black;
+            text-align: center;
+            background-color: white;
+            color: black;
+        }
+
+        .title {
+            font-family: 'DeliusUnicaseRegular', sans-serif;
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            color: #162447;
+        }
+    </style>
 </head>
 <body>
-    <h1>Code Verification</h1>
+    <?php
+    // Check if the form is submitted
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Retrieve the email from the form
+        $email = $_POST["email"];
 
-    <form method="POST" action="">
-        <label for="email">Enter your email:</label>
-        <input type="email" name="email" required>
-        <button type="submit">Send Code</button>
-    </form>
+        // TODO: Validate the email and perform necessary actions
+
+        // Generate a random key
+        $key = bin2hex(random_bytes(100));
+
+        // Calculate the expiration date/time (1 day from the current date/time)
+        $expDate = date('Y-m-d H:i:s', strtotime('+1 day'));
+
+        // Store the email, key, and expDate in the password_reset_temp table
+        $con = mysqli_connect('127.0.0.1', 'student', 'student123456789','teacher_rating_system'); // Replace with your database credentials
+        $sql = "INSERT INTO password_reset_temp (email, `key`, expDate) VALUES ('$email', '$key', '$expDate')";
+        mysqli_query($con, $sql);
+
+        // Prepare the reset link with the unique key
+        $resetLink = 'http://localhost:8888/ApacheGSI/reset_page.php?key=' . $key . '&email=' . urlencode($email);
+        // Set up the email parameters
+        $to = $email;
+        $subject = 'Reset Your Password';
+        $message = 'Click the following link to reset your password: ' . $resetLink;
+        $headers = 'From: info.ratemygsi@gmail.com';
+
+        // Send the email
+        if (mail($to, $subject, $message, $headers)) {
+            echo '<div class="container">';
+            echo '<h2 class="title">Reset Information</h2>';
+            echo '<p>Reset email sent.</p>';
+            echo '</div>';
+        } else {
+            echo '<div class="container">';
+            echo '<h2 class="title">Reset Information</h2>';
+            echo '<p>Error sending reset email.</p>';
+            echo '</div>';
+        }
+
+        exit();
+    }
+    ?>
 </body>
 </html>
