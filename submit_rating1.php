@@ -2,6 +2,16 @@
 <html>
 <head>
     <title>Rate This GSI!</title>
+    <?php
+    session_start();
+
+    // Check if the user is not logged in
+    if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+        // Redirect to the login page
+        header('Location: login.html');
+        exit();
+    }
+    ?>
     <style>
         body {
             background-color: #003262;
@@ -181,20 +191,18 @@
                 <option value="Drop/Withdrawal">Drop/Withdrawal</option>
                 <option value="Incomplete">Incomplete</option>
                 <option value="In progress">In progress</option>
-                <option value="Prefer not to say">Prefer not to say</</option>
+                <option value="Prefer not to say">Prefer not to say</option>
             </select>
-        </div>
-
-        <div class="rating-container">
-            <label for="comment">Add a comment <?php echo $firstName; ?>:</label>
-            <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
         </div>
 
         <input type="hidden" id="teacher_id" name="teacher_id" value="<?php echo $teacher_id ?>">
         <input type="hidden" id="overallRating" name="overallRating">
         <input type="hidden" id="difficultyRating" name="difficultyRating">
         <button class="submit-button" onclick="submitRating()">Submit</button>
-        <div id="teacherInfo"></div>
+        <?php 
+            session_start();
+            $_SESSION['submitted'] = true;
+        ?>
     </form>
 
     <script>
@@ -239,8 +247,6 @@
         function submitRating() {
             if (validateForm()) {
                 let teacher_id = document.getElementById("teacher_id").value;
-                let comment = encodeURIComponent(document.getElementById("comment").value);
-                document.getElementById("comment").value = comment;
             }
         }
 
