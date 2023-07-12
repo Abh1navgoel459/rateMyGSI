@@ -35,9 +35,10 @@ if (empty($username) || empty($password)) {
         session_start();
         $_SESSION['username'] = $username;
         $_SESSION['student_id'] = $student_id;
+        $_SESSION['logged_in'] = true;
         mysqli_stmt_close($stmt);
         mysqli_close($con);
-        header('Location: teacher2.html');
+        header('Location: teacher2.php');
         exit();
     } else {
         // Display an error message if the username and password are incorrect
